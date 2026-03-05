@@ -1,12 +1,14 @@
 package org.example;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 
 
 
 public class Main {
     private ArrayList<Task> tasks = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private final String FILE_NAME = "task.txt";
 
     public void run() {
         while (true) {
@@ -20,10 +22,12 @@ public class Main {
 
             if (choice.equals("1")) {
                 addTask();
+                saveTasks();
             } else if (choice.equals("2")) {
                 showTask();
             } else if (choice.equals("3")) {
                 deleteTask();
+                saveTasks();
             } else if (choice.equals("4")) {
                 System.out.println("Гудбай");
                 break;
@@ -72,6 +76,21 @@ public class Main {
             System.out.println("Введите число!");
         }
     }
+
+    private void saveTasks() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(FILE_NAME);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(tasks);
+            out.close();
+            fileOut.close();
+            System.out.println("Задача сохранена!");
+        } catch (IOException e) {
+            System.out.println("Ошибка при сохранении: " + e.getMessage());
+        }
+    }
+
+
 
     public static void main(String[] args) {
         new Main().run();
